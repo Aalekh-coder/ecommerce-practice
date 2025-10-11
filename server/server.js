@@ -1,0 +1,26 @@
+import express, { json } from "express";
+import {PORT} from "./config/env.js"
+import connectDB from "./config/db.js";
+import cors from "cors"
+import cookieParser from "cookie-parser";
+import corsConfig from "./config/cors.js";
+
+const app = express();
+
+// middlewares
+app.use(cors(corsConfig))
+app.use(cookieParser());
+app.use(json())
+
+app.get("/",(req,res)=>{
+    res.send("hello")
+})
+
+// routes
+
+
+
+app.listen(PORT, () => {
+    console.log("server is running", PORT);
+    connectDB()
+})
