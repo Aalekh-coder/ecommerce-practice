@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import corsConfig from "./config/cors.js";
+import authRouter from "./routes/auth/auth-routes.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/",(req,res)=>{
 })
 
 // routes
+app.use("/api/auth",authRouter)
 
 
 
