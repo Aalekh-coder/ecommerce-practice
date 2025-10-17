@@ -1,13 +1,13 @@
 import Form from '@/components/common/Form';
 import { registerFormControls } from '@/config';
-import { registerUserService } from '@/store/auth-slice';
+import { registerUser } from '@/store/authSlice';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 
 const initialState = {
-  username: "",
+  userName: "",
   email: "",
   password: ""
 }
@@ -21,13 +21,12 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerUserService(formData)).then((data) => {
-      console.log(data);
+    dispatch(registerUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast.success(data?.payload?.message)
-        return navigate("/auth/login");
-      }else{
-        toast.error(data?.payload?.message || "Some thing went wrong")
+      } else {
+        console.log(data);
+        toast.error(data?.payload?.message)
       }
     })
   }

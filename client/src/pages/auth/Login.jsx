@@ -1,10 +1,9 @@
 import Form from '@/components/common/Form';
 import { loginFormControls } from '@/config';
-import { loginUserService } from '@/store/auth-slice';
-import axios from 'axios';
+import { loginUser } from '@/store/authSlice';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 
 const initialState = {
@@ -18,19 +17,19 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+ 
 
-  function onSubmit(event) {
+
+  async function onSubmit(event) {
     event.preventDefault();
 
-    dispatch(loginUserService(formData)).then((data) => {
-      console.log(data);
+    dispatch(loginUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast.success(data?.payload?.message);
-       return navigate("/shop/home")
       } else {
-        toast.error(data?.payload?.message);
+        toast.error(data?.payload?.message)
       }
-    });
+    })
   }
 
   return (
