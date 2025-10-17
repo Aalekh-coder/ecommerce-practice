@@ -23,7 +23,7 @@ const Form = ({ formControls, formData, setFormData, onSubmit, buttonText }) => 
                     ...formData, [getControlItem?.name]: value
                 })}>
                     <SelectTrigger className={"w-full"}>
-                        <SelectValue placeholder={getControlItem?.placeholder} />
+                        <SelectValue placeholder={getControlItem?.label} />
                     </SelectTrigger>
                     <SelectContent>
                         {
