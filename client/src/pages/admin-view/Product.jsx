@@ -1,4 +1,4 @@
-import ImageUpload from '@/components/admin-view/ImageUpload';
+import ProductImageUpload from '@/components/admin-view/ImageUpload';
 import Form from '@/components/common/Form';
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -18,6 +18,8 @@ const Product = () => {
   }
   const [formData, setFormdata] = useState(initialFormData);
   const [openCreateProductDialog, setOpenCreateProductDialog] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
   const onSubmit = () => { }
   return (
@@ -34,7 +36,7 @@ const Product = () => {
           <SheetHeader>
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
-          <ImageUpload />
+          <ProductImageUpload imageFile={imageFile} setImageFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} />
           <div className="px-6 ">
             <Form formControls={addProductFormElements} formData={formData} setFormData={setFormdata} buttonText={"Add"} onSubmit={onSubmit} />
           </div>

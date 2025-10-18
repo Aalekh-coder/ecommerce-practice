@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import corsConfig from "./config/cors.js";
 import authRouter from "./routes/auth/auth-routes.js";
+import ProductRoutes from "./routes/admin/products-routes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get("/",(req,res)=>{
 
 // routes
 app.use("/api/auth",authRouter)
+app.use("/api/admin/products",ProductRoutes)
 
 
 
