@@ -13,7 +13,7 @@ export const getFilteredProduct = async (req, res) => {
     if (brand.length) {
       filters.brand = { $in: brand.split(",") };
     }
-    
+
     let sort = {};
     switch (sortBy) {
       case "price-lowtohigh":
@@ -22,10 +22,11 @@ export const getFilteredProduct = async (req, res) => {
       case "price-hightolow":
         sort.price = -1;
         break;
-      case "price-title-atoz":
+
+      case "title-atoz":
         sort.title = 1;
         break;
-      case "price-title-ztoa":
+      case "title-ztoa":
         sort.title = -1;
         break;
 
@@ -44,6 +45,31 @@ export const getFilteredProduct = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "some error while fetching products",
+    });
+  }
+};
+
+export const getProductsDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "some error while fetching products details",
     });
   }
 };

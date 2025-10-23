@@ -1,4 +1,5 @@
 import ProductFilter from "@/components/shopping-view/Filter";
+import ProductDetailsDialog from "@/components/shopping-view/ProductDetails";
 import ShoppingProductTile from "@/components/shopping-view/ProductTile";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { fetchAllfilteredProducts } from "@/store/shop/productSlice";
+import {
+  fetchAllfilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/productSlice";
 import { ArrowUpDownIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,20 +29,25 @@ function createSearchParamsHelper(filterParams) {
       queryParams.push(`${key}=${encodeURIComponent(paramsValue)}`);
     }
   }
-
-  console.log(queryParams,"queryParams");
   return queryParams.join("&");
 }
 
 const Listing = () => {
-  const { productList } = useSelector((state) => state.shopProduct);
+  const dispatch = useDispatch();
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProduct
+  );
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const dispatch = useDispatch();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   function handleSort(value) {
     setSort(value);
+  }
+
+  function handleGetProductDetails(id) {
+    dispatch(fetchProductDetails(id));
   }
 
   function handleFilter(getSectionId, getCurrentOption) {
@@ -77,10 +86,16 @@ const Listing = () => {
 
   // fetch list of products
   useEffect(() => {
-    dispatch(fetchAllfilteredProducts());
-  }, [dispatch]);
+    if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllfilteredProducts({ filterParams: filters, sortParams: sort })
+      );
+  }, [dispatch, sort, filters]);
 
-  console.log(searchParams?.toString());
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter
@@ -114,7 +129,7 @@ const Listing = () => {
                         value={sortItem?.id}
                         key={sortItem?.id}
                       >
-                        {sortItem?.label}{" "}
+                        {sortItem?.label}
                       </DropdownMenuRadioItem>
                     );
                   })}
@@ -127,12 +142,17 @@ const Listing = () => {
           {productList && productList.length > 0
             ? productList.map((product) => {
                 return (
-                  <ShoppingProductTile product={product} key={product?._id} />
+                  <ShoppingProductTile
+                    product={product}
+                    key={product?._id}
+                    handleGetProductDetails={handleGetProductDetails}
+                  />
                 );
               })
             : null}
         </div>
       </div>
+      <ProductDetailsDialog open={openDetailsDialog}  setOpen={setOpenDetailsDialog} productDetails={productDetails}/>
     </div>
   );
 };
