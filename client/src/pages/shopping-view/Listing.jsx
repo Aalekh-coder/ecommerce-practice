@@ -152,7 +152,7 @@ const Listing = () => {
             : null}
         </div>
       </div>
-      <ProductDetailsDialog open={openDetailsDialog}  setOpen={setOpenDetailsDialog} productDetails={productDetails}/>
+     <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails}/>
     </div>
   );
 };
