@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { addToCart } from "@/store/shop/cartSlice";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
 import {
   fetchAllfilteredProducts,
   fetchProductDetails,
@@ -38,6 +38,7 @@ const Listing = () => {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProduct
   );
+  const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
@@ -81,7 +82,11 @@ const Listing = () => {
         productId: getCurrentProductId,
         quantity: 1,
       })
-    ).then(data => console.log(data))
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+      }
+    });
   }
 
   useEffect(() => {

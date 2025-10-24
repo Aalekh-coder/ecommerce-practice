@@ -17,7 +17,7 @@ export const addToCart = async (req, res) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: "Provided not found!",
+        message: "Product not found",
       });
     }
 
@@ -30,11 +30,18 @@ export const addToCart = async (req, res) => {
     const findCurrentProductIndex = cart.items.findIndex(
       (item) => item.productId.toString() === productId
     );
+
     if (findCurrentProductIndex === -1) {
       cart.items.push({ productId, quantity });
     } else {
       cart.items[findCurrentProductIndex].quantity += quantity;
     }
+
+    await cart.save();
+    res.status(200).json({
+      success: true,
+      data: cart,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -43,6 +50,64 @@ export const addToCart = async (req, res) => {
     });
   }
 };
+
+// export const fetchCartItems = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+
+//     if (!userId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "User  is is mandatory",
+//       });
+//     }
+
+//     const cart = await Cart.findOne({ userId }).populate({
+//       path: "items?.productId",
+//       select: "image title price salePrice",
+//     });
+
+//     if (!cart) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Cart not found!",
+//       });
+//     }
+
+//     const validItems = cart.items.filter(
+//       (productItem) => productItem?.productId
+//     );
+
+//     if (validItems?.length < cart.items?.length) {
+//       cart.items = validItems;
+//       await cart.save();
+//     }
+
+//     const populateCartItems = validItems.map((item) => ({
+//       productId: item?.productId?._id,
+//       image: item?.productId?.image,
+//       title: item?.productId?.title,
+//       salePrice: item?.productId?.salePrice,
+//       price: item?.productId?.price,
+//       quantity: item?.quantity,
+//     }));
+
+//     res.status(200).json({
+//       success: true,
+//       data: {
+//         ...cart._doc,
+//         items: populateCartItems,
+//       },
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Error",
+//     });
+//   }
+// };
+
 export const fetchCartItems = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -50,12 +115,12 @@ export const fetchCartItems = async (req, res) => {
     if (!userId) {
       return res.status(400).json({
         success: false,
-        message: "User  is is mandatory",
+        message: "User id is manadatory!",
       });
     }
 
     const cart = await Cart.findOne({ userId }).populate({
-      path: "item?.productId",
+      path: "items.productId",
       select: "image title price salePrice",
     });
 
@@ -67,21 +132,21 @@ export const fetchCartItems = async (req, res) => {
     }
 
     const validItems = cart.items.filter(
-      (productItem) => productItem?.productId
+      (productItem) => productItem.productId
     );
 
-    if (validItems?.length < cart.items?.length) {
+    if (validItems.length < cart.items.length) {
       cart.items = validItems;
       await cart.save();
     }
 
     const populateCartItems = validItems.map((item) => ({
-      productId: item?.productId?._id,
-      image: item?.productId?.image,
-      title: item?.productId?.title,
-      salePrice: item?.productId?.salePrice,
-      price: item?.productId?.price,
-      quantity: item?.quantity,
+      productId: item.productId._id,
+      image: item.productId.image,
+      title: item.productId.title,
+      price: item.productId.price,
+      salePrice: item.productId.salePrice,
+      quantity: item.quantity,
     }));
 
     res.status(200).json({
