@@ -29,15 +29,15 @@ export const fetchCartItems = createAsyncThunk(
 
 export const deleteCartItems = createAsyncThunk(
   "/cart/deleteCartItems",
-  async (userId, productId) => {
+  async ({userId, productId}) => {
     const { data } = await axios.delete(
       `http://localhost:3000/api/shop/cart/${userId}/${productId}`
     );
     return data;
   }
 );
-export const updateCartItemsQuantity = createAsyncThunk(
-  "/cart/updateCartItemsQuantity",
+export const updateCartQuantity = createAsyncThunk(
+  "/cart/updateCartQuantity",
   async ({ userId, productId, quantity }) => {
     const { data } = await axios.put(
       "http://localhost:3000/api/shop/cart/update-cart",
@@ -90,15 +90,15 @@ const shoppingCartSlice = createSlice({
         state.isLoading = false;
         state.cartItems = [];
       })
-      // updateCartItemsQuantity
-      .addCase(updateCartItemsQuantity.pending, (state) => {
+      // updateCartQuantity
+      .addCase(updateCartQuantity.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateCartItemsQuantity.fulfilled, (state, action) => {
+      .addCase(updateCartQuantity.fulfilled, (state, action) => {
         state.isLoading = false;
         state.cartItems = action.payload.data;
       })
-      .addCase(updateCartItemsQuantity.rejected, (state) => {
+      .addCase(updateCartQuantity.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
       });

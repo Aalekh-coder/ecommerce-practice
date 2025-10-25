@@ -17,6 +17,7 @@ import {
 } from "@/store/shop/productSlice";
 import { ArrowUpDownIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
@@ -85,6 +86,7 @@ const Listing = () => {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
+        toast.success("Product add to toast")
       }
     });
   }
@@ -112,6 +114,9 @@ const Listing = () => {
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
+
+
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
