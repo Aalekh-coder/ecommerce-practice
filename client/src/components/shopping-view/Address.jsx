@@ -100,7 +100,7 @@ const Address = () => {
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-3">
         {addressList && addressList.length > 0
           ? addressList?.map((singleAddressItem) => (
-              <AddessCard
+              <AddessCard key={singleAddressItem?._id}
                 addressInfo={singleAddressItem}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEdit={handleEdit}
