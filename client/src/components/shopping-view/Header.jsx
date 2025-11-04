@@ -17,14 +17,33 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/authSlice";
 import UserCartWrapper from "./CartWrapper";
 import { fetchCartItems } from "@/store/shop/cartSlice";
+import { Label } from "../ui/label";
 
 function MenuItems() {
+  const navigate = useNavigate();
+  
+  function handleNavigate(getCurrentMenuItem,path) {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentMenuItem !== "home"
+        ? {
+            category: [getCurrentMenuItem],
+          }
+        : null;
+
+        sessionStorage.setItem("filters",JSON.stringify(currentFilter));
+        navigate(path)
+  }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems?.map(({ id, label, path }) => (
-        <Link to={path} key={id} className="text-sm font-medium">
+        <Label
+          onClick={() => handleNavigate(id,path)}
+          key={id}
+          className="text-sm font-medium cursor-pointer"
+        >
           {label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -57,6 +76,7 @@ function HeaderRightContent() {
           <span className="sr-only">User Cart</span>
         </Button>
         <UserCartWrapper
+        setOpenCartSheet={setOpenCartSheet}
           cartItems={
             cartItems && cartItems?.items?.length > 0 ? cartItems?.items : []
           }

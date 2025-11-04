@@ -5,10 +5,32 @@ import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Star } from "lucide-react";
 import { Input } from "../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, fetchCartItems } from "@/store/shop/cartSlice";
+import toast from "react-hot-toast";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+
+  function handleAddToCart(getCurrentProductId) {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast.success("Product add to toast");
+      }
+    });
+  }
+
   return (
-    <Dialog open={open} openChange={setOpen}>
+    <Dialog open={open} onOpenChange={()=>setOpen(false)}>
       <DialogTitle>hello</DialogTitle>
       <DialogContent className="grid grid-cols-2  gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
         <div className="relative overflow-hidden rounded-lg">
@@ -53,7 +75,12 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
             <span className="text-muted-foreground">4.5</span>
           </div>
           <div className="my-5">
-            <Button className="w-full">Add to Cart</Button>
+            <Button
+              className="w-full"
+              onClick={() => handleAddToCart(productDetails?._id)}
+            >
+              Add to Cart
+            </Button>
           </div>
           <Separator />
 
@@ -143,7 +170,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
             </div>
 
             <div className="mt-6 flex gap-2">
-              <Input placeholder="Write a review..."/>
+              <Input placeholder="Write a review..." />
               <Button>Submit</Button>
             </div>
           </div>

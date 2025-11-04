@@ -8,6 +8,7 @@ import authRouter from "./routes/auth/auth-routes.js";
 import productRoutes from "./routes/admin/products-routes.js";
 import shopProductsRoutes from "./routes/shop/products-routes.js";
 import shopCartRoutes from "./routes/shop/cart-routes.js";
+import shopAddressRoute from "./routes/shop/address-routes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api/auth",authRouter)
 app.use("/api/admin/products",productRoutes)
 app.use("/api/shop/products",shopProductsRoutes)
 app.use("/api/shop/cart",shopCartRoutes)
+app.use("/api/shop/address",shopAddressRoute)
 
 
 
