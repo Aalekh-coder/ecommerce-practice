@@ -4,22 +4,8 @@ import { Button } from "../ui/button";
 import UserCartItemsContent from "./CartItemsContent";
 import { useNavigate } from "react-router-dom";
 
-const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
-  const navigate = useNavigate();
-
-    const totalCartAmount =
-    cartItems && cartItems.length > 0
-      ? cartItems.reduce(
-          (sum, currentItem) =>
-            sum +
-            (currentItem?.salePrice > 0
-              ? currentItem?.salePrice
-              : currentItem?.price) *
-              currentItem?.quantity,
-          0
-        )
-      : 0;
-
+const UserCartWrapper = ({ cartItems }) => {
+  console.log(cartItems)
   return (
     <SheetContent className="sm:max-w-md px-4">
       <SheetHeader>
