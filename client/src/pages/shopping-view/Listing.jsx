@@ -46,6 +46,8 @@ const Listing = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
+  const categorySearchParams = searchParams.get("category");
+
   function handleSort(value) {
     setSort(value);
   }
@@ -86,7 +88,7 @@ const Listing = () => {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
-        toast.success("Product add to toast")
+        toast.success("Product add to toast");
       }
     });
   }
@@ -94,7 +96,9 @@ const Listing = () => {
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
-  }, []);
+  }, [categorySearchParams]);
+
+  console.log(productList,"productList");
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
@@ -114,9 +118,6 @@ const Listing = () => {
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
-
-
-
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">

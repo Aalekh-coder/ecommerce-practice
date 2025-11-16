@@ -109,6 +109,7 @@ export const shoppingViewHeaderMenuItems = [
     label: "Home",
     path: "/shop/home",
   },
+
   {
     id: "products",
     label: "Products",

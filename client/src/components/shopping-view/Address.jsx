@@ -20,14 +20,12 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const Address = () => {
+const Address = ({ setcurrentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
   const [currentEditedId, setCurrentEditedId] = useState(null);
-
-  console.log("addressList", addressList);
 
   function handleManageAddress(e) {
     e.preventDefault();
@@ -100,7 +98,9 @@ const Address = () => {
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-3">
         {addressList && addressList.length > 0
           ? addressList?.map((singleAddressItem) => (
-              <AddessCard key={singleAddressItem?._id}
+              <AddessCard
+                setcurrentSelectedAddress={setcurrentSelectedAddress}
+                key={singleAddressItem?._id}
                 addressInfo={singleAddressItem}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEdit={handleEdit}
